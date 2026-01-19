@@ -34,10 +34,10 @@ fn main() {
     const OUTPUT_BUCKETS: usize = 1;
 
     let inputs = Shogi1696Mirrored;
-    //let outputs = outputs::Single;
+    // let outputs = outputs::Single;
 
     let save_format = [
-        //SavedFormat::id("ftf"), // factoriser
+        // SavedFormat::id("ftf"), // factoriser
         SavedFormat::id("ftw"),
         SavedFormat::id("ftb"),
         SavedFormat::id("l1w"),
@@ -51,17 +51,17 @@ fn main() {
     let mut trainer = ValueTrainerBuilder::default()
         .dual_perspective()
         .inputs(inputs)
-        //.output_buckets(outputs)
+        // .output_buckets(outputs)
         .optimiser(optimiser::Ranger)
         .save_format(&save_format)
         .loss_fn(|output, targets| output.sigmoid().squared_error(targets))
         .build(|builder, stm, ntm| {
             let mut ft = builder.new_affine("ft", inputs.num_inputs(), L1_SIZE);
 
-            //let ftf = builder.new_weights("ftf", Shape::new(L1_SIZE, 2344), InitSettings::Zeroed);
-            //let expanded = ftf.repeat(INPUT_BUCKETS);
+            // let ftf = builder.new_weights("ftf", Shape::new(L1_SIZE, 2344), InitSettings::Zeroed);
+            // let expanded = ftf.repeat(INPUT_BUCKETS);
 
-            //ft.weights = ft.weights + expanded;
+            // ft.weights = ft.weights + expanded;
 
             let l1 = builder.new_affine("l1", L1_SIZE, OUTPUT_BUCKETS * L2_SIZE);
             let l2 = builder.new_affine("l2", L2_SIZE * 2, OUTPUT_BUCKETS * L3_SIZE);
@@ -99,13 +99,11 @@ fn main() {
     let default_optimiser_params =
         optimiser::RangerParams { min_weight: -1.98, max_weight: 1.98, ..Default::default() };
 
-    /*
-    let ftw_optimiser_params = optimiser::RangerParams {
-        min_weight: -0.99,
-        max_weight: 0.99,
-        ..default_optimiser_params
-    };
-    */
+    // let ftw_optimiser_params = optimiser::RangerParams {
+    //     min_weight: -0.99,
+    //     max_weight: 0.99,
+    //     ..default_optimiser_params
+    // };
 
     let l1w_clip = 0.99 * 255.0 * 255.0 / (256.0 * 256.0);
 
@@ -114,8 +112,8 @@ fn main() {
 
     trainer.optimiser.set_params(default_optimiser_params);
 
-    //trainer.optimiser.set_params_for_weight("ftw", ftw_optimiser_params);
-    //trainer.optimiser.set_params_for_weight("ftf", ftw_optimiser_params); // factoriser
+    // trainer.optimiser.set_params_for_weight("ftw", ftw_optimiser_params);
+    // trainer.optimiser.set_params_for_weight("ftf", ftw_optimiser_params); // factoriser
 
     trainer.optimiser.set_params_for_weight("l1w", l1w_optimiser_params);
 

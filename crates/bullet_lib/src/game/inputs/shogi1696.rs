@@ -17,7 +17,6 @@ impl Shogi1696 {
 
         let stm = [0, 848][c] + pc + stm_sq;
         let ntm = [848, 0][c] + pc + ntm_sq;
-        println!("{}, {}", stm, ntm);
         (stm, ntm)
     }
 
